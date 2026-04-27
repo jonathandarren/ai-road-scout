@@ -44,16 +44,23 @@ const makeIcon = (color: string) =>
     iconAnchor: [11, 11],
   });
 
-export const DamageMap = ({ reports }: { reports: Report[] }) => {
-  const center: [number, number] =
-    reports.length > 0
+export const DamageMap = ({
+  reports,
+  focus,
+}: {
+  reports: Report[];
+  focus?: { lat: number; lng: number } | null;
+}) => {
+  const center: [number, number] = focus
+    ? [focus.lat, focus.lng]
+    : reports.length > 0
       ? [reports[0].latitude, reports[0].longitude]
       : [-6.2088, 106.8456]; // Jakarta default
 
   return (
     <MapContainer
       center={center}
-      zoom={12}
+      zoom={focus ? 17 : 12}
       scrollWheelZoom
       className="h-full w-full rounded-2xl"
     >
@@ -61,6 +68,19 @@ export const DamageMap = ({ reports }: { reports: Report[] }) => {
         attribution='&copy; OpenStreetMap'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
+      <FlyTo position={focus ? [focus.lat, focus.lng] : null} />
+      {focus && (
+        <>
+          <Circle
+            center={[focus.lat, focus.lng]}
+            radius={30}
+            pathOptions={{ color: "#FBBF24", fillColor: "#FBBF24", fillOpacity: 0.25 }}
+          />
+          <Marker position={[focus.lat, focus.lng]} icon={makeIcon("#FBBF24")}>
+            <Popup>Lokasi Anda saat ini</Popup>
+          </Marker>
+        </>
+      )}
       {reports.map((r) => (
         <Marker
           key={r.id}
