@@ -79,7 +79,6 @@ const MobileLink = ({
     className="flex flex-1 flex-col items-center gap-1 py-2.5 text-[10px] font-semibold text-muted-foreground transition"
     activeClassName="!text-secondary"
   >
-    {({ isActive }: { isActive: boolean }) => null}
     <Icon className="h-5 w-5" />
     <span>{label}</span>
   </NavLink>
