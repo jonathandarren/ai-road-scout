@@ -12,7 +12,13 @@ type Analysis = {
 
 type Step = "idle" | "analyzing" | "review";
 
-export const ReportFlow = ({ onSaved }: { onSaved: () => void }) => {
+export const ReportFlow = ({
+  onSaved,
+  onLocation,
+}: {
+  onSaved: () => void;
+  onLocation?: (coords: { lat: number; lng: number }) => void;
+}) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [step, setStep] = useState<Step>("idle");
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
