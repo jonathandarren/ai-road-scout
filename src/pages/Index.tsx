@@ -57,7 +57,7 @@ const Index = () => {
       </header>
 
       <main className="mx-auto max-w-3xl space-y-6 px-4 py-6">
-        <ReportFlow onSaved={load} />
+        <ReportFlow onSaved={load} onLocation={setFocus} />
 
         {/* Map */}
         <section className="space-y-3">
@@ -66,7 +66,7 @@ const Index = () => {
             <h2 className="text-lg font-bold text-secondary">Peta Sebaran</h2>
           </div>
           <div className="h-72 overflow-hidden rounded-2xl shadow-card">
-            <DamageMap reports={reports} />
+            <DamageMap reports={reports} focus={focus} />
           </div>
         </section>
 
