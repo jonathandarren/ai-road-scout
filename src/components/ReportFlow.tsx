@@ -68,6 +68,7 @@ export const ReportFlow = ({
     try {
       const [location, base64] = await Promise.all([getLocation(), fileToBase64(f)]);
       setCoords(location);
+      onLocation?.(location);
 
       const { data, error } = await supabase.functions.invoke("analyze-damage", {
         body: { imageBase64: base64 },
