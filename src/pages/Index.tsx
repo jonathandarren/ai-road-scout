@@ -8,6 +8,7 @@ import { ReportFlow } from "@/components/ReportFlow";
 const Index = () => {
   const [reports, setReports] = useState<Report[]>([]);
   const [loading, setLoading] = useState(true);
+  const [focus, setFocus] = useState<{ lat: number; lng: number } | null>(null);
 
   const load = async () => {
     const { data, error } = await supabase
