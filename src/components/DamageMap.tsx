@@ -1,11 +1,22 @@
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, useMap, Circle } from "react-leaflet";
 import L from "leaflet";
+import { useEffect } from "react";
 import iconUrl from "leaflet/dist/images/marker-icon.png";
 import iconRetinaUrl from "leaflet/dist/images/marker-icon-2x.png";
 import shadowUrl from "leaflet/dist/images/marker-shadow.png";
 
 // Fix default marker assets in Vite
 L.Icon.Default.mergeOptions({ iconUrl, iconRetinaUrl, shadowUrl });
+
+const FlyTo = ({ position, zoom = 17 }: { position: [number, number] | null; zoom?: number }) => {
+  const map = useMap();
+  useEffect(() => {
+    if (position) {
+      map.flyTo(position, zoom, { duration: 1.2 });
+    }
+  }, [position?.[0], position?.[1], zoom, map]);
+  return null;
+};
 
 export type Report = {
   id: string;
