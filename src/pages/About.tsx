@@ -1,4 +1,4 @@
-import { Sparkles, Shield, Code2, Heart, Mail, Github } from "lucide-react";
+import { Sparkles, Shield, Code2, Heart, Mail, Github, Globe2, Building2, Wrench, Users } from "lucide-react";
 
 const About = () => {
   return (
@@ -47,6 +47,49 @@ const About = () => {
           title="Untuk warga"
           text="Antarmuka mobile-first, ringan, dan mudah digunakan siapa saja."
         />
+      </section>
+
+      {/* SDG Impact */}
+      <section className="rounded-3xl bg-card p-6 shadow-card sm:p-8">
+        <div className="flex items-center gap-2">
+          <Globe2 className="h-5 w-5 text-secondary" />
+          <h2 className="text-lg font-bold text-secondary">Dampak terhadap SDG</h2>
+        </div>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Aplikasi ini mendukung Sustainable Development Goals (SDGs) — 17 tujuan global PBB
+          untuk mengakhiri kemiskinan, melindungi planet, dan memastikan kemakmuran pada 2030.
+        </p>
+
+        <div className="mt-5 grid gap-3 sm:grid-cols-2">
+          <SdgCard
+            number={9}
+            color="bg-[hsl(25,90%,55%)]"
+            icon={Building2}
+            title="Industri, Inovasi & Infrastruktur"
+            text="Mempercepat perbaikan infrastruktur jalan melalui pelaporan berbasis AI dan data yang akurat."
+          />
+          <SdgCard
+            number={11}
+            color="bg-[hsl(35,85%,55%)]"
+            icon={Wrench}
+            title="Kota & Komunitas Berkelanjutan"
+            text="Menciptakan kota yang lebih aman, tangguh, dan layak huni dengan jalan yang terawat."
+          />
+          <SdgCard
+            number={3}
+            color="bg-[hsl(120,55%,40%)]"
+            icon={Shield}
+            title="Kehidupan Sehat & Sejahtera"
+            text="Mengurangi kecelakaan lalu lintas akibat jalan rusak, menyelamatkan nyawa pengguna jalan."
+          />
+          <SdgCard
+            number={17}
+            color="bg-[hsl(215,60%,35%)]"
+            icon={Users}
+            title="Kemitraan untuk Tujuan"
+            text="Menjembatani warga, pemerintah, dan teknologi untuk kolaborasi penanganan jalan rusak."
+          />
+        </div>
       </section>
 
       {/* Contact */}
@@ -101,6 +144,31 @@ const ValueCard = ({
     </div>
     <h3 className="mt-3 font-bold text-secondary">{title}</h3>
     <p className="mt-1 text-sm text-muted-foreground">{text}</p>
+  </div>
+);
+
+const SdgCard = ({
+  number,
+  color,
+  icon: Icon,
+  title,
+  text,
+}: {
+  number: number;
+  color: string;
+  icon: React.ComponentType<{ className?: string }>;
+  title: string;
+  text: string;
+}) => (
+  <div className="flex gap-3 rounded-2xl border border-border bg-background/50 p-4">
+    <div className={`flex h-12 w-12 shrink-0 flex-col items-center justify-center rounded-xl text-white ${color}`}>
+      <span className="text-lg font-extrabold leading-none">{number}</span>
+      <Icon className="mt-1 h-3.5 w-3.5" />
+    </div>
+    <div>
+      <h3 className="text-sm font-bold text-secondary">{title}</h3>
+      <p className="mt-1 text-xs text-muted-foreground">{text}</p>
+    </div>
   </div>
 );
 
