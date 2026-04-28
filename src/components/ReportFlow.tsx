@@ -1,14 +1,19 @@
 import { useRef, useState } from "react";
-import { Camera, Loader2, MapPin, Sparkles, X, AlertTriangle } from "lucide-react";
+import { Camera, Loader2, MapPin, Sparkles, X, AlertTriangle, Wrench, Clock, Coins } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import type { RepairEstimate } from "./DamageMap";
 
 type Analysis = {
   severity: string;
   estimated_area: string;
   description: string;
+  repair_estimate?: RepairEstimate;
 };
+
+export const formatIDR = (n: number) =>
+  new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(n || 0);
 
 type Step = "idle" | "analyzing" | "review";
 
