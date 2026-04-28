@@ -1,6 +1,7 @@
 import { Construction, Home, LayoutDashboard, Info } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { Outlet } from "react-router-dom";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 export const Layout = () => {
   return (
@@ -19,12 +20,15 @@ export const Layout = () => {
             </div>
           </NavLink>
 
-          {/* Desktop nav */}
-          <nav className="hidden gap-1 sm:flex">
-            <DesktopLink to="/" label="Beranda" icon={Home} />
-            <DesktopLink to="/dashboard" label="Dashboard" icon={LayoutDashboard} />
-            <DesktopLink to="/about" label="About" icon={Info} />
-          </nav>
+          <div className="flex items-center gap-2">
+            {/* Desktop nav */}
+            <nav className="hidden gap-1 sm:flex">
+              <DesktopLink to="/" label="Beranda" icon={Home} />
+              <DesktopLink to="/dashboard" label="Dashboard" icon={LayoutDashboard} />
+              <DesktopLink to="/about" label="About" icon={Info} />
+            </nav>
+            <ThemeToggle />
+          </div>
         </div>
       </header>
 
