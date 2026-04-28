@@ -24,6 +24,7 @@ export type Database = {
           latitude: number
           longitude: number
           photo_url: string
+          repair_estimate: Json | null
           severity: string
         }
         Insert: {
@@ -35,6 +36,7 @@ export type Database = {
           latitude: number
           longitude: number
           photo_url: string
+          repair_estimate?: Json | null
           severity: string
         }
         Update: {
@@ -46,6 +48,7 @@ export type Database = {
           latitude?: number
           longitude?: number
           photo_url?: string
+          repair_estimate?: Json | null
           severity?: string
         }
         Relationships: []

@@ -4,6 +4,19 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type",
 };
 
+interface RepairMaterial {
+  name: string;
+  quantity: string;
+  unit_price: number;
+  subtotal: number;
+}
+interface RepairEstimate {
+  materials: RepairMaterial[];
+  labor_cost: number;
+  total_cost: number;
+  duration: string;
+  method: string;
+}
 interface Payload {
   severity: string;
   estimated_area: string;
@@ -11,8 +24,12 @@ interface Payload {
   latitude: number;
   longitude: number;
   photo_url: string;
+  repair_estimate?: RepairEstimate | null;
   target?: string;
 }
+
+const formatIDR = (n: number) =>
+  new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(n || 0);
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -29,12 +46,29 @@ Deno.serve(async (req) => {
     if (!target) throw new Error("Nomor tujuan (FONNTE_TARGET) belum diatur");
 
     const mapsLink = `https://www.google.com/maps?q=${body.latitude},${body.longitude}`;
+
+    let estimateSection = "";
+    if (body.repair_estimate) {
+      const est = body.repair_estimate;
+      const lines = est.materials
+        .map((m) => `• ${m.name} — ${m.quantity} × ${formatIDR(m.unit_price)} = ${formatIDR(m.subtotal)}`)
+        .join("\n");
+      estimateSection =
+        `\n💰 *ESTIMASI PERBAIKAN*\n` +
+        `${lines}\n` +
+        `• Upah Tukang = ${formatIDR(est.labor_cost)}\n` +
+        `*Total Biaya:* ${formatIDR(est.total_cost)}\n` +
+        `*Durasi:* ${est.duration}\n` +
+        `*Metode:* ${est.method}\n`;
+    }
+
     const message =
       `🚧 *LAPORAN JALAN RUSAK*\n\n` +
       `*Tingkat Kerusakan:* ${body.severity}\n` +
       `*Estimasi Luas:* ${body.estimated_area}\n\n` +
-      `*Analisis AI:*\n${body.description}\n\n` +
-      `📍 *Lokasi:* ${mapsLink}\n` +
+      `*Analisis AI:*\n${body.description}\n` +
+      estimateSection +
+      `\n📍 *Lokasi:* ${mapsLink}\n` +
       `📷 *Foto:* ${body.photo_url}\n\n` +
       `_Dilaporkan via Peta Lapor Jalan Rusak AI_`;
 

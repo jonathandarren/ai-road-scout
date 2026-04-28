@@ -18,6 +18,21 @@ const FlyTo = ({ position, zoom = 17 }: { position: [number, number] | null; zoo
   return null;
 };
 
+export type RepairMaterial = {
+  name: string;
+  quantity: string;
+  unit_price: number;
+  subtotal: number;
+};
+
+export type RepairEstimate = {
+  materials: RepairMaterial[];
+  labor_cost: number;
+  total_cost: number;
+  duration: string;
+  method: string;
+};
+
 export type Report = {
   id: string;
   photo_url: string;
@@ -28,6 +43,7 @@ export type Report = {
   longitude: number;
   address?: string | null;
   created_at: string;
+  repair_estimate?: RepairEstimate | null;
 };
 
 const severityColor = (s: string) => {

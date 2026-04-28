@@ -1,9 +1,12 @@
 import { useState } from "react";
-import { MapPin, Clock, Send, Loader2 } from "lucide-react";
+import { MapPin, Clock, Send, Loader2, Wrench, Coins } from "lucide-react";
 import type { Report } from "./DamageMap";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+
+const formatIDR = (n: number) =>
+  new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(n || 0);
 
 const severityStyle = (s: string) => {
   if (s === "Berat") return "bg-destructive text-destructive-foreground";
@@ -32,6 +35,7 @@ export const ReportCard = ({ report }: { report: Report }) => {
           latitude: report.latitude,
           longitude: report.longitude,
           photo_url: report.photo_url,
+          repair_estimate: report.repair_estimate ?? null,
         },
       });
       if (error) throw error;
@@ -70,6 +74,39 @@ export const ReportCard = ({ report }: { report: Report }) => {
           </span>
         </div>
         <div className="text-xs font-medium text-secondary">Luas: {report.estimated_area}</div>
+
+        {report.repair_estimate && (
+          <div className="rounded-xl border border-primary/30 bg-primary/5 p-3 text-xs">
+            <div className="mb-2 flex items-center gap-1.5 font-bold text-secondary">
+              <Wrench className="h-3.5 w-3.5 text-primary" />
+              Estimasi Perbaikan
+            </div>
+            <ul className="mb-2 space-y-0.5 text-muted-foreground">
+              {report.repair_estimate.materials.map((m, i) => (
+                <li key={i} className="flex justify-between gap-2">
+                  <span>• {m.name} ({m.quantity})</span>
+                  <span className="font-medium text-secondary">{formatIDR(m.subtotal)}</span>
+                </li>
+              ))}
+              <li className="flex justify-between gap-2">
+                <span>• Upah Tukang</span>
+                <span className="font-medium text-secondary">{formatIDR(report.repair_estimate.labor_cost)}</span>
+              </li>
+            </ul>
+            <div className="flex items-center justify-between border-t border-primary/20 pt-2">
+              <span className="flex items-center gap-1 font-bold text-secondary">
+                <Coins className="h-3.5 w-3.5" /> Total
+              </span>
+              <span className="font-bold text-secondary">{formatIDR(report.repair_estimate.total_cost)}</span>
+            </div>
+            <div className="mt-1 flex items-center justify-between text-muted-foreground">
+              <span className="flex items-center gap-1">
+                <Clock className="h-3 w-3" /> Durasi
+              </span>
+              <span className="font-medium text-secondary">{report.repair_estimate.duration}</span>
+            </div>
+          </div>
+        )}
         <Button
           onClick={handleSend}
           disabled={sending}

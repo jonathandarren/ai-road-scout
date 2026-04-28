@@ -15,7 +15,7 @@ const Dashboard = () => {
       .from("reports")
       .select("*")
       .order("created_at", { ascending: false });
-    if (!error && data) setReports(data as Report[]);
+    if (!error && data) setReports(data as unknown as Report[]);
     setLoading(false);
   };
 

@@ -1,14 +1,19 @@
 import { useRef, useState } from "react";
-import { Camera, Loader2, MapPin, Sparkles, X, AlertTriangle } from "lucide-react";
+import { Camera, Loader2, MapPin, Sparkles, X, AlertTriangle, Wrench, Clock, Coins } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import type { RepairEstimate } from "./DamageMap";
 
 type Analysis = {
   severity: string;
   estimated_area: string;
   description: string;
+  repair_estimate?: RepairEstimate;
 };
+
+export const formatIDR = (n: number) =>
+  new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(n || 0);
 
 type Step = "idle" | "analyzing" | "review";
 
@@ -105,6 +110,7 @@ export const ReportFlow = ({
         description: analysis.description,
         latitude: coords.lat,
         longitude: coords.lng,
+        repair_estimate: analysis.repair_estimate ?? null,
       });
       if (insErr) throw insErr;
 
@@ -209,6 +215,70 @@ export const ReportFlow = ({
               )}
             </div>
           </div>
+
+          {analysis.repair_estimate && (
+            <div className="rounded-2xl border-2 border-primary/40 bg-card p-4">
+              <div className="mb-3 flex items-center gap-2">
+                <Wrench className="h-4 w-4 text-primary" />
+                <span className="text-sm font-bold text-secondary">Estimasi Perbaikan</span>
+              </div>
+
+              <div className="mb-3 space-y-1 text-xs">
+                <div className="font-semibold text-secondary">Rincian Material (harga pasar):</div>
+                <div className="overflow-hidden rounded-lg border border-border">
+                  <table className="w-full text-left">
+                    <thead className="bg-muted text-[11px] uppercase text-muted-foreground">
+                      <tr>
+                        <th className="px-2 py-1.5">Material</th>
+                        <th className="px-2 py-1.5">Jumlah</th>
+                        <th className="px-2 py-1.5 text-right">Harga</th>
+                        <th className="px-2 py-1.5 text-right">Subtotal</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {analysis.repair_estimate.materials.map((m, i) => (
+                        <tr key={i} className="border-t border-border">
+                          <td className="px-2 py-1.5 font-medium text-secondary">{m.name}</td>
+                          <td className="px-2 py-1.5 text-muted-foreground">{m.quantity}</td>
+                          <td className="px-2 py-1.5 text-right text-muted-foreground">{formatIDR(m.unit_price)}</td>
+                          <td className="px-2 py-1.5 text-right font-semibold text-secondary">{formatIDR(m.subtotal)}</td>
+                        </tr>
+                      ))}
+                      <tr className="border-t border-border bg-muted/50">
+                        <td className="px-2 py-1.5 font-medium text-secondary" colSpan={3}>Upah Tukang</td>
+                        <td className="px-2 py-1.5 text-right font-semibold text-secondary">
+                          {formatIDR(analysis.repair_estimate.labor_cost)}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2">
+                <div className="rounded-lg bg-primary/10 p-2.5">
+                  <div className="flex items-center gap-1 text-[11px] text-muted-foreground">
+                    <Coins className="h-3 w-3" /> Total Biaya
+                  </div>
+                  <div className="text-sm font-bold text-secondary">
+                    {formatIDR(analysis.repair_estimate.total_cost)}
+                  </div>
+                </div>
+                <div className="rounded-lg bg-primary/10 p-2.5">
+                  <div className="flex items-center gap-1 text-[11px] text-muted-foreground">
+                    <Clock className="h-3 w-3" /> Durasi
+                  </div>
+                  <div className="text-sm font-bold text-secondary">
+                    {analysis.repair_estimate.duration}
+                  </div>
+                </div>
+              </div>
+
+              <p className="mt-2 text-xs italic text-muted-foreground">
+                Metode: {analysis.repair_estimate.method}
+              </p>
+            </div>
+          )}
 
           <Button onClick={handleSave} disabled={saving} className="w-full font-bold shadow-warm">
             {saving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
