@@ -16,7 +16,7 @@ export const Layout = () => {
             </div>
             <div>
               <h1 className="text-base font-extrabold leading-tight">Lapor Jalan Rusak AI</h1>
-              <p className="text-[10px] text-secondary-foreground/70">Analisis kerusakan dengan AI</p>
+              <p className="text-[10px] text-secondary-foreground/70 dark:text-white">Analisis kerusakan dengan AI</p>
             </div>
           </NavLink>
 
