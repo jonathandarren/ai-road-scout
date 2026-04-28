@@ -147,4 +147,29 @@ const ValueCard = ({
   </div>
 );
 
+const SdgCard = ({
+  number,
+  color,
+  icon: Icon,
+  title,
+  text,
+}: {
+  number: number;
+  color: string;
+  icon: React.ComponentType<{ className?: string }>;
+  title: string;
+  text: string;
+}) => (
+  <div className="flex gap-3 rounded-2xl border border-border bg-background/50 p-4">
+    <div className={`flex h-12 w-12 shrink-0 flex-col items-center justify-center rounded-xl text-white ${color}`}>
+      <span className="text-lg font-extrabold leading-none">{number}</span>
+      <Icon className="mt-1 h-3.5 w-3.5" />
+    </div>
+    <div>
+      <h3 className="text-sm font-bold text-secondary">{title}</h3>
+      <p className="mt-1 text-xs text-muted-foreground">{text}</p>
+    </div>
+  </div>
+);
+
 export default About;
