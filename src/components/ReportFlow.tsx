@@ -110,6 +110,7 @@ export const ReportFlow = ({
         description: analysis.description,
         latitude: coords.lat,
         longitude: coords.lng,
+        repair_estimate: analysis.repair_estimate ?? null,
       });
       if (insErr) throw insErr;
 
