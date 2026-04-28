@@ -35,6 +35,7 @@ export const ReportCard = ({ report }: { report: Report }) => {
           latitude: report.latitude,
           longitude: report.longitude,
           photo_url: report.photo_url,
+          repair_estimate: report.repair_estimate ?? null,
         },
       });
       if (error) throw error;
