@@ -1,9 +1,12 @@
 import { useState } from "react";
-import { MapPin, Clock, Send, Loader2 } from "lucide-react";
+import { MapPin, Clock, Send, Loader2, Wrench, Coins } from "lucide-react";
 import type { Report } from "./DamageMap";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+
+const formatIDR = (n: number) =>
+  new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(n || 0);
 
 const severityStyle = (s: string) => {
   if (s === "Berat") return "bg-destructive text-destructive-foreground";
