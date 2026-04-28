@@ -31,12 +31,12 @@ Deno.serve(async (req) => {
           {
             role: "system",
             content:
-              "Anda adalah ahli teknik sipil yang menganalisis kerusakan jalan dari foto. Selalu balas dalam bahasa Indonesia dengan memanggil tool analyze_road_damage.",
+              "Anda adalah ahli teknik sipil Indonesia yang menganalisis kerusakan jalan dari foto DAN memperkirakan biaya perbaikannya. Gunakan harga pasar material konstruksi Indonesia saat ini (rupiah) yang realistis: pasir ~Rp 250.000-350.000/m³, semen ~Rp 65.000-75.000/sak 50kg, kerikil/split ~Rp 280.000-380.000/m³, aspal hotmix ~Rp 1.400.000-1.800.000/ton, batu belah ~Rp 200.000/m³, upah tukang ~Rp 150.000/hari. Hitung kebutuhan material berdasarkan estimasi luas dan jenis kerusakan. Selalu balas dalam bahasa Indonesia dengan memanggil tool analyze_road_damage.",
           },
           {
             role: "user",
             content: [
-              { type: "text", text: "Analisis foto kerusakan jalan ini. Tentukan tingkat kerusakan, estimasi luas area, dan berikan deskripsi teknis singkat." },
+              { type: "text", text: "Analisis foto kerusakan jalan ini. Tentukan tingkat kerusakan, estimasi luas area, deskripsi teknis, rincian material + biaya perbaikan (harga pasar Indonesia terkini), total biaya, dan estimasi waktu pengerjaan." },
               { type: "image_url", image_url: { url: imageBase64 } },
             ],
           },
